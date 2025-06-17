@@ -1,16 +1,60 @@
 import 'package:flutter/material.dart';
+import 'package:np_vending_machine_app/models/drink.dart';
+import 'package:np_vending_machine_app/screens/vending/widgets/currency_input_section.dart';
+import 'package:np_vending_machine_app/screens/vending/widgets/drink_grid_section.dart';
 
-class VendingScreen extends StatelessWidget {
+class VendingScreen extends StatefulWidget {
   static const routeName = '/vending';
 
   const VendingScreen({super.key});
 
   @override
+  State<VendingScreen> createState() => _VendingScreenState();
+}
+
+class _VendingScreenState extends State<VendingScreen> {
+  int insertedAmount = 0;
+  Drink? selectedDrink;
+
+  final List<Drink> drinks = [
+    Drink(name: '믹스커피', price: 200, stock: 5),
+    Drink(name: '고급믹스커피', price: 300, stock: 3),
+    Drink(name: '물', price: 450, stock: 4),
+    Drink(name: '캔커피', price: 500, stock: 2),
+    Drink(name: '이온음료', price: 550, stock: 2),
+    Drink(name: '고급캔커피', price: 700, stock: 2),
+    Drink(name: '탄산음료', price: 750, stock: 1),
+    Drink(name: '특화음료', price: 800, stock: 0),
+  ];
+
+  void insertMoney(int unit) {
+    if (insertedAmount + unit <= 7000) {
+      setState(() {
+        insertedAmount += unit;
+      });
+    }
+  }
+
+  void refund() {
+    setState(() {
+      insertedAmount = 0;
+      selectedDrink = null;
+    });
+  }
+
+  void selectDrink(Drink drink) {
+    setState(() {
+      selectedDrink = drink;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
-        automaticallyImplyLeading: false, // 뒤로가기 제거
+        automaticallyImplyLeading: false,
         title: const Text(
           '자판기',
           style: TextStyle(
@@ -32,19 +76,22 @@ class VendingScreen extends StatelessWidget {
             fit: BoxFit.cover,
           ),
         ),
+        padding: const EdgeInsets.fromLTRB(16, kToolbarHeight + 32, 16, 32),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text(
-              '자판기 페이지',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                fontFamily: 'Pretendard',
-                color: Colors.white,
-              ),
+            DrinkGridSection(
+              drinks: drinks,
+              selectedDrink: selectedDrink,
+              onSelect: selectDrink,
             ),
-            const SizedBox(height: 40),
+            const SizedBox(height: 32),
+            CurrencyInputSection(
+              insertedAmount: insertedAmount,
+              onInsertMoney: insertMoney,
+              onRefund: refund,
+            ),
+            const SizedBox(height: 32),
             ElevatedButton(
               onPressed: () {
                 Navigator.pushNamed(context, '/login');
