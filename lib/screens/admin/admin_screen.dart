@@ -1,37 +1,115 @@
 import 'package:flutter/material.dart';
 
-class AdminScreen extends StatefulWidget {
-  @override
-  _AdminScreenState createState() => _AdminScreenState();
-}
+class AdminScreen extends StatelessWidget {
+  static const routeName = '/admin';
 
-class _AdminScreenState extends State<AdminScreen> {
-  int _currentIndex = 0;
-
-  final List<Widget> _pages = [
-    Center(child: Text('관리자 메인 페이지')),
-    Center(child: Text('자판기 페이지')),
-    Center(child: Text('매출 관리 페이지')),
+  final List<_NavItem> _navItems = const [
+    _NavItem(icon: Icons.admin_panel_settings, label: '관리자', route: '/admin'),
+    _NavItem(icon: Icons.local_drink, label: '자판기', route: '/vending'),
+    _NavItem(icon: Icons.bar_chart, label: '매출', route: '/sales'),
   ];
 
-  final List<String> _titles = ['관리자', '자판기', '매출'];
+  const AdminScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(_titles[_currentIndex])),
-      body: _pages[_currentIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        items: const [
-          BottomNavigationBarItem(
-              icon: Icon(Icons.admin_panel_settings), label: '관리자'),
-          BottomNavigationBarItem(icon: Icon(Icons.local_drink), label: '자판기'),
-          BottomNavigationBarItem(icon: Icon(Icons.bar_chart), label: '매출'),
-        ],
-        onTap: (index) {
-          setState(() => _currentIndex = index);
-        },
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: const Text(
+          '관리자',
+          style: TextStyle(
+            fontFamily: 'Pretendard',
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+        ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        centerTitle: true,
+      ),
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/background.png'),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: const Center(
+          child: Text(
+            '관리자 메인 페이지',
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Pretendard',
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ),
+      bottomNavigationBar:
+          _BottomNavBar(currentRoute: routeName, navItems: _navItems),
+    );
+  }
+}
+
+class _NavItem {
+  final IconData icon;
+  final String label;
+  final String route;
+
+  const _NavItem({
+    required this.icon,
+    required this.label,
+    required this.route,
+  });
+}
+
+class _BottomNavBar extends StatelessWidget {
+  final String currentRoute;
+  final List<_NavItem> navItems;
+
+  const _BottomNavBar({required this.currentRoute, required this.navItems});
+
+  @override
+  Widget build(BuildContext context) {
+    return BottomAppBar(
+      color: Colors.white,
+      child: SizedBox(
+        height: 80,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: navItems.map((item) {
+            final bool isSelected =
+                ModalRoute.of(context)?.settings.name == item.route;
+            return InkWell(
+              onTap: () {
+                if (!isSelected) {
+                  Navigator.pushReplacementNamed(context, item.route);
+                }
+              },
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(item.icon,
+                      color: isSelected ? Colors.black : Colors.grey, size: 30),
+                  const SizedBox(height: 4),
+                  Text(
+                    item.label,
+                    style: TextStyle(
+                      fontFamily: 'Pretendard',
+                      fontSize: 14,
+                      color: isSelected ? Colors.black : Colors.grey,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }).toList(),
+        ),
       ),
     );
   }
