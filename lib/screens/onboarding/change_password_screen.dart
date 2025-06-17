@@ -15,8 +15,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   final TextEditingController confirmNewPasswordController =
       TextEditingController();
 
+  String? currentPasswordError;
   String? newPasswordError;
-  String? passwordMatchError;
+  String? confirmPasswordError;
 
   bool isPasswordValid(String password) {
     final regex = RegExp(r'^(?=.*[0-9])(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$');
@@ -24,19 +25,20 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   }
 
   void handleChangePassword() {
-    final email = emailController.text;
+    final email = emailController.text.trim();
     final currentPassword = currentPasswordController.text;
     final newPassword = newPasswordController.text;
     final confirmPassword = confirmNewPasswordController.text;
 
     setState(() {
+      currentPasswordError = null;
       newPasswordError = null;
-      passwordMatchError = null;
+      confirmPasswordError = null;
     });
 
     if (email != currentPassword) {
       setState(() {
-        passwordMatchError = '아이디와 현재 비밀번호가 일치하지 않습니다.';
+        currentPasswordError = '아이디와 현재 비밀번호가 일치하지 않습니다.';
       });
       return;
     }
@@ -50,7 +52,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
     if (newPassword != confirmPassword) {
       setState(() {
-        passwordMatchError = '새 비밀번호가 일치하지 않습니다.';
+        confirmPasswordError = '새 비밀번호가 일치하지 않습니다.';
       });
       return;
     }
@@ -92,7 +94,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 TextField(
                   controller: emailController,
                   decoration: InputDecoration(
-                    labelText: '아이디를 입력해주세요.',
+                    labelText: '아이디를 입력해주세요',
                     labelStyle: const TextStyle(fontFamily: 'Pretendard'),
                     filled: true,
                     fillColor: Colors.white70,
@@ -117,7 +119,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     labelStyle: const TextStyle(fontFamily: 'Pretendard'),
                     filled: true,
                     fillColor: Colors.white70,
-                    errorText: passwordMatchError,
+                    errorText: currentPasswordError,
                     enabledBorder: OutlineInputBorder(
                       borderSide: const BorderSide(color: Colors.white),
                       borderRadius: BorderRadius.circular(4),
@@ -161,7 +163,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     labelStyle: const TextStyle(fontFamily: 'Pretendard'),
                     filled: true,
                     fillColor: Colors.white70,
-                    errorText: passwordMatchError,
+                    errorText: confirmPasswordError,
                     enabledBorder: OutlineInputBorder(
                       borderSide: const BorderSide(color: Colors.white),
                       borderRadius: BorderRadius.circular(4),
@@ -174,7 +176,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 ),
                 const SizedBox(height: 24),
 
-                // 비밀번호 변경 버튼
+                // 변경 버튼
                 ElevatedButton(
                   onPressed: handleChangePassword,
                   style: ElevatedButton.styleFrom(
@@ -205,7 +207,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       style: TextStyle(
                         fontSize: 16,
                         fontFamily: 'Pretendard',
-                        color: Color.fromARGB(255, 0, 0, 0),
+                        color: Colors.black,
                       ),
                     ),
                     TextButton(
@@ -218,7 +220,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                           fontSize: 16,
                           fontFamily: 'Pretendard',
                           fontWeight: FontWeight.bold,
-                          color: Color.fromARGB(255, 0, 0, 0),
+                          color: Colors.black,
                         ),
                       ),
                     ),

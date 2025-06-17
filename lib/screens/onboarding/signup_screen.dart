@@ -81,7 +81,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 TextField(
                   controller: emailController,
                   decoration: InputDecoration(
-                    labelText: '아이디를 입력해주세요.',
+                    labelText: '아이디를 입력해주세요',
                     labelStyle: const TextStyle(fontFamily: 'Pretendard'),
                     filled: true,
                     fillColor: Colors.white70,
