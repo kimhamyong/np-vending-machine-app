@@ -8,109 +8,92 @@ class InitialScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          // 배경 이미지
-          Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: NetworkImage(
-                    'https://images.unsplash.com/photo-1557683316-973673baf926?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80'),
-                fit: BoxFit.cover,
+      // 앱바 제거
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/background.png'),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Column(
+          children: [
+            const Spacer(flex: 5),
+            const Center(
+              child: Text(
+                '자판기 프로그램',
+                style: TextStyle(
+                  fontSize: 55,
+                  fontWeight: FontWeight.w900,
+                  fontFamily: 'Pretendard',
+                  color: Colors.indigo,
+                ),
+                textAlign: TextAlign.center,
               ),
             ),
-          ),
-
-          // 내용
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                flex: 6,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 60, left: 25),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      Text(
-                        'Welcome',
-                        style: TextStyle(
-                          fontSize: 55,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                      Text(
-                        '자판기 시스템에 오신 것을 환영합니다.',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontStyle: FontStyle.italic,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
+            const SizedBox(height: 10),
+            const Center(
+              child: Text(
+                '자판기 프로그램에 오신 것을 환영합니다',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontFamily: 'Pretendard',
+                  fontWeight: FontWeight.w700,
+                  color: Color.fromARGB(255, 118, 118, 118),
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            const Spacer(flex: 5),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              child: ElevatedButton(
+                onPressed: () =>
+                    Navigator.of(context).pushNamed(LoginScreen.routeName),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.indigo,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                  minimumSize: const Size(double.infinity, 60),
+                ),
+                child: const Text(
+                  '로그인',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w700,
+                    fontFamily: 'Pretendard',
+                    color: Colors.white,
                   ),
                 ),
               ),
-              Expanded(
-                flex: 3,
-                child: Column(
-                  children: [
-                    Container(
-                      height: 80,
-                      width: double.infinity,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 24, vertical: 12),
-                      child: ElevatedButton(
-                        onPressed: () => Navigator.of(context)
-                            .pushNamed(LoginScreen.routeName),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.indigo,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(25),
-                          ),
-                        ),
-                        child: const Text(
-                          '로그인',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      height: 80,
-                      width: double.infinity,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 24, vertical: 12),
-                      child: ElevatedButton(
-                        onPressed: () => Navigator.of(context)
-                            .pushNamed(SignupScreen.routeName),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(25),
-                          ),
-                        ),
-                        child: const Text(
-                          '회원가입',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.lightBlue,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              child: ElevatedButton(
+                onPressed: () =>
+                    Navigator.of(context).pushNamed(SignupScreen.routeName),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                  minimumSize: const Size(double.infinity, 60),
+                ),
+                child: const Text(
+                  '회원가입',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w700,
+                    fontFamily: 'Pretendard',
+                    color: Color.fromARGB(255, 118, 118, 118),
+                  ),
                 ),
               ),
-            ],
-          ),
-        ],
+            ),
+            const Spacer(flex: 3),
+          ],
+        ),
       ),
     );
   }

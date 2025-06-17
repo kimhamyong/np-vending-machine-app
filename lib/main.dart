@@ -17,6 +17,7 @@ class VendingMachineApp extends StatelessWidget {
     return MaterialApp(
       title: 'Vending Machine',
       theme: ThemeData(primarySwatch: Colors.blue),
+      debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {
         '/': (context) => InitialScreen(),
