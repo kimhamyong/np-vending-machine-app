@@ -36,11 +36,11 @@ class LoginScreen extends StatelessWidget {
               children: [
                 const SizedBox(height: kToolbarHeight + 200),
 
-                // 이메일 입력
+                // 아이디 입력
                 TextField(
                   controller: emailController,
                   decoration: InputDecoration(
-                    labelText: '이메일',
+                    labelText: '아이디',
                     labelStyle: const TextStyle(fontFamily: 'Pretendard'),
                     filled: true,
                     fillColor: Colors.white70,
@@ -108,7 +108,7 @@ class LoginScreen extends StatelessWidget {
                     Navigator.pushNamed(context, '/change-password');
                   },
                   child: const Text(
-                    '비밀번호를 잊으셨나요?',
+                    '비밀번호를 변경하시겠어요?',
                     style: TextStyle(
                       fontSize: 16,
                       fontFamily: 'Pretendard',
