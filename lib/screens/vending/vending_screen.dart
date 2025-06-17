@@ -88,8 +88,15 @@ class _VendingScreenState extends State<VendingScreen> {
             const SizedBox(height: 32),
             CurrencyInputSection(
               insertedAmount: insertedAmount,
-              onInsertMoney: insertMoney,
-              onRefund: refund,
+              onInsertMoney: (unit) {
+                setState(() => insertedAmount += unit);
+              },
+              onRefund: () {
+                setState(() => insertedAmount = 0);
+              },
+              onPurchase: () {
+                // TODO: 구매 로직
+              },
             ),
             const SizedBox(height: 32),
             ElevatedButton(
