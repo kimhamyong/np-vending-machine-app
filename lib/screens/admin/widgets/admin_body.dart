@@ -91,18 +91,20 @@ class _AdminBodyState extends State<AdminBody> {
         ),
       ),
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 100, 16, 16),
+        padding: const EdgeInsets.fromLTRB(16, 120, 16, 0), // 전체 여백 유지
         child: Column(
           children: [
-            Expanded(
-              child: DrinkGridSection(
-                drinks: drinks,
-                selectedDrink: null,
-                onSelect: onSelectDrink,
-                isAdmin: true,
-              ),
+            /// 음료 그리드는 내용만 차지
+            DrinkGridSection(
+              drinks: drinks,
+              selectedDrink: null,
+              onSelect: onSelectDrink,
+              isAdmin: true,
             ),
-            const SizedBox(height: 12),
+
+            const Spacer(), // 남은 공간 밀어내기
+
+            /// 거스름돈 상태 박스
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -110,6 +112,8 @@ class _AdminBodyState extends State<AdminBody> {
               ],
             ),
             const SizedBox(height: 12),
+
+            /// 하단 버튼
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -159,7 +163,44 @@ class _AdminBodyState extends State<AdminBody> {
                   ),
                 ),
               ],
-            )
+            ),
+            const SizedBox(height: 12),
+
+            // 계정 삭제 / 로그아웃 버튼
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/delete-account');
+                  },
+                  child: const Text(
+                    '계정 삭제',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 24),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pushReplacementNamed(context, '/login');
+                  },
+                  child: const Text(
+                    '로그아웃',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontFamily: 'Pretendard',
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
       ),

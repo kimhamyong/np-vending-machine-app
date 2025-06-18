@@ -25,7 +25,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
 
     if (email.isEmpty || !email.contains('@')) {
       setState(() {
-        emailError = '올바른 아이디(이메일)를 입력해주세요.';
+        emailError = '올바른 아이디를 입력해주세요.';
       });
       return;
     }
@@ -162,7 +162,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                     ),
                     TextButton(
                       onPressed: () {
-                        Navigator.pushNamed(context, '/login');
+                        Navigator.pushNamed(context, '/');
                       },
                       child: const Text(
                         '로그인',
