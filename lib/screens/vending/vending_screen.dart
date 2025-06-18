@@ -4,6 +4,7 @@ import 'package:np_vending_machine_app/screens/vending/widgets/currency_input_se
 import 'package:np_vending_machine_app/screens/vending/widgets/drink_grid_section.dart';
 import 'package:np_vending_machine_app/screens/vending/widgets/change_status_box.dart';
 import 'package:np_vending_machine_app/vending/vending_manager.dart';
+import 'package:np_vending_machine_app/screens/utils/error_dialog.dart';
 
 class VendingScreen extends StatefulWidget {
   static const routeName = '/vending';
@@ -82,11 +83,9 @@ class _VendingScreenState extends State<VendingScreen> {
   }
 
   void _showAlert(String msg) {
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        content: Text(msg),
-      ),
+    ErrorDialog.show(
+      context,
+      msg.replaceFirst('Exception: ', ''),
     );
   }
 

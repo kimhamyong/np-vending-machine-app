@@ -1,12 +1,17 @@
+class BSTNode {
+  int key;
+  int value;
+  BSTNode? left;
+  BSTNode? right;
+
+  BSTNode(this.key, this.value);
+}
+
 class BST {
   BSTNode? root;
 
   void insert(int key, int value) {
     root = _insert(root, key, value);
-  }
-
-  void update(int key, int value) {
-    insert(key, value); // alias
   }
 
   BSTNode _insert(BSTNode? node, int key, int value) {
