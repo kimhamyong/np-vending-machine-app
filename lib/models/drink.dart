@@ -8,4 +8,6 @@ class Drink {
     required this.price,
     required this.stock,
   });
+
+  bool get canSelect => stock > 0;
 }

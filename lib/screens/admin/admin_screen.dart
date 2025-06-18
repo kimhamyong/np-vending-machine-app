@@ -1,7 +1,102 @@
 import 'package:flutter/material.dart';
+import 'package:np_vending_machine_app/models/drink.dart';
+import 'package:np_vending_machine_app/screens/vending/widgets/change_status_box.dart';
+import 'package:np_vending_machine_app/screens/vending/widgets/drink_grid_section.dart';
+import 'package:np_vending_machine_app/vending/coin_store.dart';
 
-class AdminScreen extends StatelessWidget {
+class AdminScreen extends StatefulWidget {
   static const routeName = '/admin';
+
+  const AdminScreen({super.key});
+
+  @override
+  State<AdminScreen> createState() => _AdminScreenState();
+}
+
+class _AdminScreenState extends State<AdminScreen> {
+  Map<int, int> changeStatus = {};
+
+  List<Drink> drinks = [
+    Drink(name: '믹스커피', price: 200, stock: 5),
+    Drink(name: '고급믹스커피', price: 300, stock: 3),
+    Drink(name: '물', price: 450, stock: 4),
+    Drink(name: '캔커피', price: 500, stock: 2),
+    Drink(name: '이온음료', price: 550, stock: 2),
+    Drink(name: '고급캔커피', price: 700, stock: 2),
+    Drink(name: '탄산음료', price: 750, stock: 1),
+    Drink(name: '특화음료', price: 800, stock: 0),
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadChangeStatus();
+  }
+
+  Future<void> _loadChangeStatus() async {
+    final coins = await CoinStore.loadCoins();
+    setState(() {
+      changeStatus = coins;
+    });
+  }
+
+  void onSelectDrink(Drink drink) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (_) => _buildDrinkBottomSheet(drink),
+    );
+  }
+
+  Widget _buildDrinkBottomSheet(Drink drink) {
+    return Padding(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            '${drink.name}',
+            style: const TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Pretendard',
+            ),
+          ),
+          const SizedBox(height: 12),
+          Text('가격: ${drink.price}원'),
+          Text('재고: ${drink.stock}개'),
+          const SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('수정'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _handleCollect() async {
+    for (final unit in CoinStore.coinUnits) {
+      final current = changeStatus[unit] ?? 0;
+      final keep = current > 10 ? 10 : current;
+      await CoinStore.setCoin(unit, keep);
+    }
+    await _loadChangeStatus();
+  }
+
+  Future<void> _handleFill() async {
+    for (final unit in CoinStore.coinUnits) {
+      final current = changeStatus[unit] ?? 0;
+      if (current < 10) {
+        await CoinStore.setCoin(unit, 10);
+      }
+    }
+    await _loadChangeStatus();
+  }
 
   final List<_NavItem> _navItems = const [
     _NavItem(icon: Icons.admin_panel_settings, label: '관리자', route: '/admin'),
@@ -9,22 +104,12 @@ class AdminScreen extends StatelessWidget {
     _NavItem(icon: Icons.bar_chart, label: '매출', route: '/sales'),
   ];
 
-  const AdminScreen({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: const Text(
-          '관리자',
-          style: TextStyle(
-            fontFamily: 'Pretendard',
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
-          ),
-        ),
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
@@ -38,20 +123,79 @@ class AdminScreen extends StatelessWidget {
             fit: BoxFit.cover,
           ),
         ),
-        child: const Center(
-          child: Text(
-            '관리자 메인 페이지',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'Pretendard',
-              color: Colors.white,
-            ),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 100, 16, 16),
+          child: Column(
+            children: [
+              Expanded(
+                child: DrinkGridSection(
+                  drinks: drinks,
+                  selectedDrink: null,
+                  onSelect: onSelectDrink,
+                ),
+              ),
+              const SizedBox(height: 12),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(child: ChangeStatusBox(status: changeStatus)),
+                ],
+              ),
+              const SizedBox(height: 12),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: 170,
+                    height: 60,
+                    child: ElevatedButton(
+                      onPressed: _handleCollect,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.redAccent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: const Text(
+                        '수금하기',
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  SizedBox(
+                    width: 170,
+                    height: 60,
+                    child: ElevatedButton(
+                      onPressed: _handleFill,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.indigo,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: const Text(
+                        '채우기',
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontFamily: 'Pretendard',
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
+                      ),
+                    ),
+                  ),
+                ],
+              )
+            ],
           ),
         ),
       ),
-      bottomNavigationBar:
-          _BottomNavBar(currentRoute: routeName, navItems: _navItems),
+      bottomNavigationBar: _BottomNavBar(
+          currentRoute: AdminScreen.routeName, navItems: _navItems),
     );
   }
 }

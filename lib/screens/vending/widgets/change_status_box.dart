@@ -40,7 +40,7 @@ class ChangeStatusBox extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
-                    fontSize: 14,
+                    fontSize: 12,
                     fontFamily: 'Pretendard',
                   ),
                 ),
