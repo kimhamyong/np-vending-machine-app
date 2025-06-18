@@ -2,7 +2,7 @@ import 'package:np_vending_machine_app/vending/structures/bst.dart';
 import 'package:np_vending_machine_app/vending/structures/stack.dart';
 import 'package:np_vending_machine_app/vending/structures/queue.dart';
 import 'package:np_vending_machine_app/vending/change_calculator.dart';
-import 'package:np_vending_machine_app/vending/coin_store.dart';
+import 'package:np_vending_machine_app/storage/coin_store.dart';
 
 class VendingManager {
   List<int>? insertedMoney;
