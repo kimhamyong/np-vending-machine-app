@@ -57,7 +57,11 @@ class _VendingScreenState extends State<VendingScreen> {
     final refundQueue = vendingManager.refund();
     final list = refundQueue.toList();
 
-    _showAlert(list.isEmpty ? '반환할 금액이 없습니다.' : list.join("원, ") + ' 반환됨');
+    final message = list.isEmpty
+        ? '반환할 금액이 없습니다.'
+        : '${list.map((e) => '$e원').join(', ')} 반환됨';
+
+    _showAlert(message);
 
     // 거스름돈 현황은 변화 없음
     setState(() {});
@@ -68,9 +72,9 @@ class _VendingScreenState extends State<VendingScreen> {
 
     try {
       final change = await vendingManager.purchase(selectedDrink!.price);
-      final list = change.toList();
+      final list = change.toList().map((e) => '$e원').join(', ');
 
-      _showAlert(list.isEmpty ? '거스름돈 없음' : list.join("원, ") + ' 거스름돈 반환됨');
+      _showAlert(change.isEmpty ? '거스름돈 없음' : '$list 거스름돈 반환됨');
 
       final status = await vendingManager.getInventoryStatus();
       setState(() {
