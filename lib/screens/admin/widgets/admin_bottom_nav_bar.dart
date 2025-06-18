@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:np_vending_machine_app/screens/admin/admin_screen.dart';
 
 class AdminBottomNavBar extends StatelessWidget {
   const AdminBottomNavBar({super.key});
