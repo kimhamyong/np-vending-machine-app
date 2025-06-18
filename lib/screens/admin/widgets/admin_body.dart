@@ -172,10 +172,11 @@ class _AdminBodyState extends State<AdminBody> {
               children: [
                 TextButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, '/delete-account');
+                    Navigator.pushReplacementNamed(context, '/login',
+                        arguments: {'fromAdmin': true});
                   },
                   child: const Text(
-                    '계정 삭제',
+                    '로그아웃',
                     style: TextStyle(
                       fontSize: 16,
                       fontFamily: 'Pretendard',
@@ -187,10 +188,10 @@ class _AdminBodyState extends State<AdminBody> {
                 const SizedBox(width: 24),
                 TextButton(
                   onPressed: () {
-                    Navigator.pushReplacementNamed(context, '/login');
+                    Navigator.pushNamed(context, '/delete-account');
                   },
                   child: const Text(
-                    '로그아웃',
+                    '계정 삭제',
                     style: TextStyle(
                       fontSize: 16,
                       fontFamily: 'Pretendard',

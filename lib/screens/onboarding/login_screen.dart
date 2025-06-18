@@ -26,13 +26,25 @@ class _LoginScreenState extends State<LoginScreen> {
     });
   }
 
+  Future<void> _deleteAccount() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.clear(); // 계정 정보 초기화
+    if (mounted) {
+      Navigator.pushReplacementNamed(context, '/login');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final bool hasUserId = userId != null && userId!.isNotEmpty;
+    final args =
+        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    final bool fromAdmin = args?['fromAdmin'] == true;
 
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
+        automaticallyImplyLeading: !fromAdmin,
         title: const Text(
           '로그인',
           style: TextStyle(
@@ -54,12 +66,11 @@ class _LoginScreenState extends State<LoginScreen> {
           child: SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 24.0),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: kToolbarHeight + 150),
 
-                // 인사 문구 또는 유도 멘트
+                // 인사 문구
                 Text(
                   hasUserId ? '$userId님\n안녕하세요' : '처음 방문하셨나요?\n지금 바로 가입해보세요!',
                   style: const TextStyle(
@@ -169,23 +180,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ],
                   ),
-                // 계정 삭제 버튼
-                Center(
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/delete-account');
-                    },
-                    child: const Text(
-                      '계정 삭제',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontFamily: 'Pretendard',
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ),
-                )
+
+                const SizedBox(height: 16),
               ],
             ),
           ),
