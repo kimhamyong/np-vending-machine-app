@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:np_vending_machine_app/models/drink.dart';
+import 'package:np_vending_machine_app/screens/vending/widgets/coin_drop_overlay.dart';
 import 'package:np_vending_machine_app/screens/vending/widgets/currency_input_section.dart';
 import 'package:np_vending_machine_app/screens/vending/widgets/drink_grid_section.dart';
 import 'package:np_vending_machine_app/screens/vending/widgets/change_status_box.dart';
@@ -53,17 +54,25 @@ class _VendingScreenState extends State<VendingScreen> {
     }
   }
 
+  void _showCoinDrop(List<int> coins) {
+    if (coins.isEmpty) return;
+
+    showDialog(
+      context: context,
+      barrierColor: Colors.transparent,
+      barrierDismissible: false,
+      builder: (_) => CoinDropOverlay(coins: coins),
+    );
+  }
+
   void handleRefund() {
     final refundQueue = vendingManager.refund();
     final list = refundQueue.toList();
 
-    final message = list.isEmpty
-        ? '반환할 금액이 없습니다.'
-        : '${list.map((e) => '$e원').join(', ')} 반환됨';
+    if (list.isNotEmpty) {
+      _showCoinDrop(list); // 애니메이션으로 동전 내려오기
+    }
 
-    _showAlert(message);
-
-    // 거스름돈 현황은 변화 없음
     setState(() {});
   }
 
@@ -72,9 +81,11 @@ class _VendingScreenState extends State<VendingScreen> {
 
     try {
       final change = await vendingManager.purchase(selectedDrink!.price);
-      final list = change.toList().map((e) => '$e원').join(', ');
+      final list = change.toList();
 
-      _showAlert(change.isEmpty ? '거스름돈 없음' : '$list 거스름돈 반환됨');
+      if (list.isNotEmpty) {
+        _showCoinDrop(list);
+      }
 
       final status = await vendingManager.getInventoryStatus();
       setState(() {
@@ -82,7 +93,7 @@ class _VendingScreenState extends State<VendingScreen> {
         selectedDrink = null;
       });
     } catch (e) {
-      _showAlert(e.toString());
+      _showAlert(e.toString()); // 예외만 다이얼로그로 출력
     }
   }
 
