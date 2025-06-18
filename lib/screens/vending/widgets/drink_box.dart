@@ -6,6 +6,7 @@ class DrinkBox extends StatelessWidget {
   final bool isEnabled;
   final bool isSelected;
   final VoidCallback onTap;
+  final bool isAdmin; // ← 추가됨
 
   const DrinkBox({
     super.key,
@@ -13,12 +14,15 @@ class DrinkBox extends StatelessWidget {
     required this.isEnabled,
     required this.isSelected,
     required this.onTap,
+    this.isAdmin = false, // ← 기본값 false
   });
 
   @override
   Widget build(BuildContext context) {
+    final canTap = isEnabled || isAdmin;
+
     return GestureDetector(
-      onTap: isEnabled ? onTap : null,
+      onTap: canTap ? onTap : null,
       child: Opacity(
         opacity: isEnabled ? 1.0 : 0.4,
         child: Container(
@@ -28,8 +32,8 @@ class DrinkBox extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 4),
           decoration: BoxDecoration(
             color: isSelected
-                ? const Color.fromARGB(255, 255, 214, 214) // 선택 시 색상
-                : Colors.white, // 미선택 시 흰색
+                ? const Color.fromARGB(255, 255, 214, 214)
+                : Colors.white,
             borderRadius: BorderRadius.circular(12),
             boxShadow: const [
               BoxShadow(

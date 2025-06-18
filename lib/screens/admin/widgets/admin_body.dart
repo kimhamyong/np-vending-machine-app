@@ -99,6 +99,7 @@ class _AdminBodyState extends State<AdminBody> {
                 drinks: drinks,
                 selectedDrink: null,
                 onSelect: onSelectDrink,
+                isAdmin: true,
               ),
             ),
             const SizedBox(height: 12),

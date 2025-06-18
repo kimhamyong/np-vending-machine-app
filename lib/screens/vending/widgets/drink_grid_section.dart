@@ -6,12 +6,14 @@ class DrinkGridSection extends StatelessWidget {
   final List<Drink> drinks;
   final Drink? selectedDrink;
   final void Function(Drink) onSelect;
+  final bool isAdmin; // ← 추가
 
   const DrinkGridSection({
     super.key,
     required this.drinks,
     required this.selectedDrink,
     required this.onSelect,
+    this.isAdmin = false, // ← 기본값 false
   });
 
   @override
@@ -32,6 +34,7 @@ class DrinkGridSection extends StatelessWidget {
             isEnabled: drink.stock > 0,
             isSelected: selectedDrink == drink,
             onTap: () => onSelect(drink),
+            isAdmin: isAdmin, // ← 전달
           );
         }).toList(),
       ),
