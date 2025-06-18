@@ -9,12 +9,18 @@ class ChangeCalculator {
   ChangeCalculator(this.coinInventory);
 
   Future<CustomQueue<int>> calculateChange(int amount) async {
+    // 최신 SharedPreferences로 coinInventory(BST) 업데이트
+    final coinsFromStorage = await CoinStore.loadCoins();
+    for (final entry in coinsFromStorage.entries) {
+      coinInventory.insert(entry.key, entry.value);
+    }
+
     final units = <int>[];
     coinInventory.inOrder((key, value) {
       units.add(key);
     });
 
-    final sorted = Sort.descending(units);
+    final sorted = Sort.descending(units); // 큰 단위부터
     final result = CustomQueue<int>();
     final Map<int, int> used = {};
 
@@ -29,13 +35,12 @@ class ChangeCalculator {
     }
 
     if (amount > 0) {
-      return CustomQueue<int>();
+      return CustomQueue<int>(); // 실패 시 빈 큐
     }
 
-    // BST, SharedPreferences 반영
+    // 성공 → BST + SharedPreferences에 반영
     for (final entry in used.entries) {
-      final current = coinInventory.getValue(entry.key)!;
-      final updated = current - entry.value;
+      final updated = (coinInventory.getValue(entry.key) ?? 0) - entry.value;
       coinInventory.insert(entry.key, updated);
       await CoinStore.setCoin(entry.key, updated);
     }

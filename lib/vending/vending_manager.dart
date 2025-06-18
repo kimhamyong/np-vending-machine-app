@@ -55,10 +55,21 @@ class VendingManager {
     }
 
     final changeAmount = totalAmount - price;
-    final change = await calculator.calculateChange(changeAmount);
 
-    if (change.isEmpty && changeAmount > 0) {
-      throw Exception("거스름돈이 부족합니다. 관리자에게 문의해주세요.");
+    // 1. 사용자가 넣은 금액을 전체 자판기 보유 동전으로 반영
+    for (final unit in insertedMoney!) {
+      final current = coinInventory.getValue(unit) ?? 0;
+      coinInventory.insert(unit, current + 1);
+      await CoinStore.setCoin(unit, current + 1);
+    }
+
+    // 2. 거스름돈 계산
+    CustomQueue<int> change = CustomQueue<int>();
+    if (changeAmount > 0) {
+      change = await calculator.calculateChange(changeAmount);
+      if (change.isEmpty) {
+        throw Exception("거스름돈이 부족합니다. 관리자에게 문의해주세요.");
+      }
     }
 
     clearInserted();

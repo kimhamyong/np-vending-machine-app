@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ChangeStatusBox extends StatelessWidget {
-  final Map<int, int> status; // ex: {10: 8, 50: 9, 100: 10, 1000: 7}
-
+  final Map<int, int> status;
   const ChangeStatusBox({
     super.key,
     required this.status,

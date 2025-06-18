@@ -1,7 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CoinStore {
-  static const List<int> coinUnits = [10, 50, 100, 1000];
+  static const List<int> coinUnits = [10, 50, 100, 500, 1000];
 
   /// 최초 실행 시 호출 – 단위별 10개로 초기화
   static Future<void> initializeIfNeeded() async {
