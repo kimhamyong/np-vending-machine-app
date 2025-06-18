@@ -107,27 +107,37 @@ class _SalesScreenState extends State<SalesScreen> {
                           icon: const Icon(Icons.chevron_left)),
                       Text(selectedMonthStr,
                           style: const TextStyle(
-                              fontSize: 25, fontWeight: FontWeight.bold)),
+                              fontSize: 27,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Pretendard')),
                       IconButton(
                           onPressed: _goToNextMonth,
                           icon: const Icon(Icons.chevron_right)),
                     ],
                   ),
-                  const SizedBox(height: 4),
-                  const Text('총 판매 금액', style: TextStyle(fontSize: 16)),
+                  const SizedBox(height: 6),
+                  const Text('총 판매 금액',
+                      style: TextStyle(fontSize: 16, fontFamily: 'Pretendard')),
                   Text(
                     '${NumberFormat('#,###').format(totalMonthlySales)}원',
                     style: const TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.green,
-                    ),
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.green,
+                        fontFamily: 'Pretendard'),
                   ),
                   const SizedBox(height: 46),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text('매출 등록일 선택', style: TextStyle(fontSize: 16)),
+                      Text(
+                        '매출 등록일 선택',
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Pretendard',
+                            color: Colors.grey[800]),
+                      ),
                       const SizedBox(width: 12),
                       GestureDetector(
                         onTap: () async {
@@ -171,8 +181,11 @@ class _SalesScreenState extends State<SalesScreen> {
                             children: [
                               Text(
                                 selectedDateStr,
-                                style: const TextStyle(
-                                    fontSize: 16, color: Colors.black),
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'Pretendard',
+                                    color: Colors.grey[800]),
                               ),
                               const SizedBox(width: 8),
                               const Icon(Icons.arrow_drop_down,
@@ -183,14 +196,13 @@ class _SalesScreenState extends State<SalesScreen> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 8),
                   Text(
                     '${NumberFormat('#,###').format(totalDailySales)}원',
                     style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.green,
-                    ),
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.green,
+                        fontFamily: 'Pretendard'),
                   ),
                   const SizedBox(height: 12),
                   Expanded(
@@ -199,8 +211,8 @@ class _SalesScreenState extends State<SalesScreen> {
                       itemBuilder: (context, index) {
                         final s = dailySales[index];
                         return Container(
-                          margin: const EdgeInsets.symmetric(vertical: 6),
-                          padding: const EdgeInsets.all(12),
+                          margin: const EdgeInsets.symmetric(vertical: 5),
+                          padding: const EdgeInsets.all(14),
                           decoration: BoxDecoration(
                             color: Colors.white.withOpacity(0.9),
                             borderRadius: BorderRadius.circular(12),
@@ -208,17 +220,27 @@ class _SalesScreenState extends State<SalesScreen> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(s.drink.name,
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold)),
+                              Text(
+                                s.drink.name,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'Pretendard',
+                                    fontSize: 20),
+                              ),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
                                   Text('${s.drink.price}원 × ${s.sold}개',
-                                      style: const TextStyle(fontSize: 14)),
+                                      style: const TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.grey,
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: 'Pretendard')),
                                   Text('${s.total}원',
                                       style: const TextStyle(
-                                          fontWeight: FontWeight.bold)),
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: 'Pretendard',
+                                          fontSize: 20)),
                                 ],
                               ),
                             ],
