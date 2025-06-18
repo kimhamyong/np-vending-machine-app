@@ -7,13 +7,13 @@ import 'package:np_vending_machine_app/screens/onboarding/change_password_screen
 import 'package:np_vending_machine_app/screens/vending/vending_screen.dart';
 import 'package:np_vending_machine_app/screens/admin/admin_screen.dart';
 import 'package:np_vending_machine_app/screens/admin/sales_screen.dart';
+import 'package:np_vending_machine_app/services/dio_service.dart';
 import 'package:np_vending_machine_app/storage/coin_store.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   await CoinStore.initializeIfNeeded();
-
+  await DioService.init();
   runApp(VendingMachineApp());
 }
 

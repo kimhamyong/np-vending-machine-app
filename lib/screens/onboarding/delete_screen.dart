@@ -162,7 +162,7 @@ class _DeleteAccountScreenState extends State<DeleteAccountScreen> {
                     ),
                     TextButton(
                       onPressed: () {
-                        Navigator.pushNamed(context, '/');
+                        Navigator.pushNamed(context, '/login');
                       },
                       child: const Text(
                         '로그인',
