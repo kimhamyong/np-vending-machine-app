@@ -1,12 +1,16 @@
 class Drink {
-  final String name;
-  final int price;
-  int stock; // 재고 (변할 수 있으므로 가변)
+  String name;
+  int price;
+  int stock;
+  bool requested;
+  int? pendingStock;
 
   Drink({
     required this.name,
     required this.price,
     required this.stock,
+    this.requested = false,
+    this.pendingStock,
   });
 
   bool get canSelect => stock > 0;

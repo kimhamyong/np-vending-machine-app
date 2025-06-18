@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:np_vending_machine_app/models/drink.dart';
+import 'package:np_vending_machine_app/screens/admin/widgets/drink_edit_bottom_sheet.dart';
 import 'package:np_vending_machine_app/screens/vending/widgets/change_status_box.dart';
 import 'package:np_vending_machine_app/screens/vending/widgets/drink_grid_section.dart';
 import 'package:np_vending_machine_app/vending/coin_store.dart';
@@ -43,38 +44,20 @@ class _AdminScreenState extends State<AdminScreen> {
   void onSelectDrink(Drink drink) {
     showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
-      builder: (_) => _buildDrinkBottomSheet(drink),
-    );
-  }
-
-  Widget _buildDrinkBottomSheet(Drink drink) {
-    return Padding(
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            '${drink.name}',
-            style: const TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'Pretendard',
-            ),
-          ),
-          const SizedBox(height: 12),
-          Text('가격: ${drink.price}원'),
-          Text('재고: ${drink.stock}개'),
-          const SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: const Text('수정'),
-          ),
-        ],
+      builder: (_) => DrinkEditBottomSheet(
+        drink: drink,
+        onConfirm: (updatedDrink) {
+          setState(() {
+            drink.name = updatedDrink.name;
+            drink.price = updatedDrink.price;
+            drink.stock = updatedDrink.stock;
+            drink.requested = updatedDrink.requested;
+          });
+        },
       ),
     );
   }
@@ -159,10 +142,11 @@ class _AdminScreenState extends State<AdminScreen> {
                       child: const Text(
                         '수금하기',
                         style: TextStyle(
-                            fontSize: 18,
-                            fontFamily: 'Pretendard',
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
+                          fontSize: 18,
+                          fontFamily: 'Pretendard',
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
@@ -181,10 +165,11 @@ class _AdminScreenState extends State<AdminScreen> {
                       child: const Text(
                         '채우기',
                         style: TextStyle(
-                            fontSize: 18,
-                            fontFamily: 'Pretendard',
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
+                          fontSize: 18,
+                          fontFamily: 'Pretendard',
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
@@ -195,7 +180,9 @@ class _AdminScreenState extends State<AdminScreen> {
         ),
       ),
       bottomNavigationBar: _BottomNavBar(
-          currentRoute: AdminScreen.routeName, navItems: _navItems),
+        currentRoute: AdminScreen.routeName,
+        navItems: _navItems,
+      ),
     );
   }
 }
@@ -238,8 +225,11 @@ class _BottomNavBar extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(item.icon,
-                      color: isSelected ? Colors.black : Colors.grey, size: 30),
+                  Icon(
+                    item.icon,
+                    color: isSelected ? Colors.black : Colors.grey,
+                    size: 30,
+                  ),
                   const SizedBox(height: 4),
                   Text(
                     item.label,
