@@ -169,6 +169,23 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ],
                   ),
+                // 계정 삭제 버튼
+                Center(
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/delete-account');
+                    },
+                    child: const Text(
+                      '계정 삭제',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontFamily: 'Pretendard',
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ),
+                )
               ],
             ),
           ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:np_vending_machine_app/screens/onboarding/delete_screen.dart';
 import 'package:np_vending_machine_app/screens/onboarding/initial_screen.dart';
 import 'package:np_vending_machine_app/screens/onboarding/login_screen.dart';
 import 'package:np_vending_machine_app/screens/onboarding/signup_screen.dart';
@@ -38,6 +39,8 @@ class VendingMachineApp extends StatelessWidget {
         '/vending': (context) => VendingScreen(),
         '/admin': (context) => AdminScreen(),
         '/sales': (context) => SalesScreen(),
+        '/sales': (context) => SalesScreen(),
+        '/delete-account': (context) => DeleteAccountScreen(),
       },
     );
   }
