@@ -19,7 +19,7 @@ class DrinkGridSection extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: const Color(0xFFE0F2FF), // 연한 하늘색
+        color: const Color(0xFFE0F2FF),
         border: Border.all(color: Colors.white, width: 5),
         borderRadius: BorderRadius.circular(24),
       ),
