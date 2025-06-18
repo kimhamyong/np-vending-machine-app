@@ -81,17 +81,10 @@ class _SalesScreenState extends State<SalesScreen> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
-        title: const Text(
-          '매출',
-          style: TextStyle(
-            fontFamily: 'Pretendard',
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
-          ),
-        ),
       ),
       body: Stack(
         children: [
@@ -103,7 +96,7 @@ class _SalesScreenState extends State<SalesScreen> {
           ),
           SafeArea(
             child: Padding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
                 children: [
                   Row(
@@ -114,7 +107,7 @@ class _SalesScreenState extends State<SalesScreen> {
                           icon: const Icon(Icons.chevron_left)),
                       Text(selectedMonthStr,
                           style: const TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold)),
+                              fontSize: 25, fontWeight: FontWeight.bold)),
                       IconButton(
                           onPressed: _goToNextMonth,
                           icon: const Icon(Icons.chevron_right)),
@@ -130,14 +123,14 @@ class _SalesScreenState extends State<SalesScreen> {
                       color: Colors.green,
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 46),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Text('매출 등록일 선택', style: TextStyle(fontSize: 16)),
                       const SizedBox(width: 12),
-                      OutlinedButton(
-                        onPressed: () async {
+                      GestureDetector(
+                        onTap: () async {
                           final picked = await showDatePicker(
                             context: context,
                             initialDate: selectedDate,
@@ -170,19 +163,22 @@ class _SalesScreenState extends State<SalesScreen> {
                             });
                           }
                         },
-                        style: OutlinedButton.styleFrom(
-                          side: const BorderSide(color: Colors.grey),
-                          backgroundColor: Colors.white,
-                          foregroundColor: Colors.black,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.zero,
-                          ),
+                        child: Container(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 16, vertical: 12),
-                        ),
-                        child: Text(
-                          selectedDateStr,
-                          style: const TextStyle(fontSize: 16),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                selectedDateStr,
+                                style: const TextStyle(
+                                    fontSize: 16, color: Colors.black),
+                              ),
+                              const SizedBox(width: 8),
+                              const Icon(Icons.arrow_drop_down,
+                                  color: Colors.black),
+                            ],
+                          ),
                         ),
                       ),
                     ],
