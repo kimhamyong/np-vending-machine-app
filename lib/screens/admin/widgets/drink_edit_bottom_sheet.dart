@@ -66,8 +66,9 @@ class DrinkEditContent extends StatelessWidget {
             keyboardType: TextInputType.number,
             textAlign: TextAlign.center,
             style: const TextStyle(
-              fontSize: 18,
+              fontSize: 24,
               color: Colors.grey,
+              fontWeight: FontWeight.bold,
               fontFamily: 'Pretendard',
             ),
             decoration: const InputDecoration(
@@ -76,7 +77,7 @@ class DrinkEditContent extends StatelessWidget {
               hintText: '가격 입력',
             ),
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 20),
           // 수량 조정
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -157,7 +158,7 @@ class DrinkEditContent extends StatelessWidget {
               ),
               const SizedBox(height: 12),
 
-              // 요청하기
+              // 재고 변경
               SizedBox(
                 width: double.infinity,
                 height: 52,
@@ -170,7 +171,7 @@ class DrinkEditContent extends StatelessWidget {
                     ),
                   ),
                   child: Text(
-                    '요청하기',
+                    '재고 변경',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
