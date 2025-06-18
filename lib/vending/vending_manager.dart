@@ -13,6 +13,14 @@ class VendingManager {
 
   VendingManager() {
     calculator = ChangeCalculator(coinInventory);
+    _loadInitialInventory(); // SharedPreferences → BST 초기화
+  }
+
+  Future<void> _loadInitialInventory() async {
+    final coins = await CoinStore.loadCoins();
+    for (final entry in coins.entries) {
+      coinInventory.insert(entry.key, entry.value);
+    }
   }
 
   /// 금액 입력 처리
@@ -57,7 +65,7 @@ class VendingManager {
     final changeAmount = totalAmount - price;
 
     // 1. 사용자가 넣은 금액을 전체 자판기 보유 동전으로 반영
-    for (final unit in insertedMoney!) {
+    for (final unit in insertedMoney ?? []) {
       final current = coinInventory.getValue(unit) ?? 0;
       coinInventory.insert(unit, current + 1);
       await CoinStore.setCoin(unit, current + 1);
@@ -82,6 +90,7 @@ class VendingManager {
     stack.clear();
   }
 
+  /// SharedPreferences에서 현재 동전 상태 조회
   Future<Map<int, int>> getInventoryStatus() async {
     return await CoinStore.loadCoins();
   }
