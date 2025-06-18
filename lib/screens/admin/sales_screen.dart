@@ -136,7 +136,7 @@ class _SalesScreenState extends State<SalesScreen> {
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                             fontFamily: 'Pretendard',
-                            color: Colors.grey[800]),
+                            color: Colors.grey[900]),
                       ),
                       const SizedBox(width: 12),
                       GestureDetector(
@@ -185,7 +185,7 @@ class _SalesScreenState extends State<SalesScreen> {
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                     fontFamily: 'Pretendard',
-                                    color: Colors.grey[800]),
+                                    color: Colors.grey[900]),
                               ),
                               const SizedBox(width: 8),
                               const Icon(Icons.arrow_drop_down,

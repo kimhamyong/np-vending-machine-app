@@ -8,7 +8,7 @@ class ChangePasswordScreen extends StatefulWidget {
 }
 
 class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
-  final TextEditingController emailController = TextEditingController();
+  final TextEditingController idController = TextEditingController();
   final TextEditingController currentPasswordController =
       TextEditingController();
   final TextEditingController newPasswordController = TextEditingController();
@@ -25,7 +25,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   }
 
   void handleChangePassword() {
-    final email = emailController.text.trim();
+    final id = idController.text.trim();
     final currentPassword = currentPasswordController.text;
     final newPassword = newPasswordController.text;
     final confirmPassword = confirmNewPasswordController.text;
@@ -36,7 +36,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       confirmPasswordError = null;
     });
 
-    if (email != currentPassword) {
+    if (id != currentPassword) {
       setState(() {
         currentPasswordError = '아이디와 현재 비밀번호가 일치하지 않습니다.';
       });
@@ -57,7 +57,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       return;
     }
 
-    print('비밀번호 변경 완료: $email → $newPassword');
+    print('비밀번호 변경 완료: $id → $newPassword');
     Navigator.pushReplacementNamed(context, '/login');
   }
 
@@ -89,26 +89,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             child: Column(
               children: [
                 const SizedBox(height: kToolbarHeight + 200),
-
-                // 아이디 입력
-                TextField(
-                  controller: emailController,
-                  decoration: InputDecoration(
-                    labelText: '아이디를 입력해주세요',
-                    labelStyle: const TextStyle(fontFamily: 'Pretendard'),
-                    filled: true,
-                    fillColor: Colors.white70,
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Colors.white),
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Colors.white),
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
 
                 // 현재 비밀번호 입력
                 TextField(

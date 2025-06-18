@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignupScreen extends StatefulWidget {
   static const routeName = '/signup';
@@ -8,7 +9,7 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
-  final TextEditingController emailController = TextEditingController();
+  final TextEditingController idController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController =
       TextEditingController();
@@ -21,7 +22,7 @@ class _SignupScreenState extends State<SignupScreen> {
     return regex.hasMatch(password);
   }
 
-  void handleSignup() {
+  void handleSignup() async {
     final password = passwordController.text;
     final confirmPassword = confirmPasswordController.text;
 
@@ -44,7 +45,10 @@ class _SignupScreenState extends State<SignupScreen> {
       return;
     }
 
-    print('회원가입 성공: ${emailController.text}');
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('saved_id', idController.text); // 내부 저장
+
+    print('회원가입 성공: ${idController.text}');
     Navigator.pushReplacementNamed(context, '/admin');
   }
 
@@ -79,7 +83,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
                 // 아이디 입력
                 TextField(
-                  controller: emailController,
+                  controller: idController,
                   decoration: InputDecoration(
                     labelText: '아이디를 입력해주세요',
                     labelStyle: const TextStyle(fontFamily: 'Pretendard'),
