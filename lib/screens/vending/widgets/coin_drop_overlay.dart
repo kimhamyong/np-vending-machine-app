@@ -65,11 +65,11 @@ class _CoinDropOverlayState extends State<CoinDropOverlay>
         padding: const EdgeInsets.all(6),
         child: Image.asset(
           imagePath,
-          width: 50,
-          height: 50,
+          width: 60,
+          height: 60,
           errorBuilder: (context, error, stackTrace) => Container(
-            width: 50,
-            height: 50,
+            width: 60,
+            height: 60,
             color: Colors.grey[400],
             child: Center(child: Text('$unit원')),
           ),

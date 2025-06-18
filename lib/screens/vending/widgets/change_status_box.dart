@@ -10,17 +10,17 @@ class ChangeStatusBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(12),
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+      padding: const EdgeInsets.all(15),
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(0.9),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.black, width: 1.2),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            '💰 거스름돈 현황',
+            '거스름돈 현황',
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 16,
@@ -29,14 +29,19 @@ class ChangeStatusBox extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Wrap(
-            spacing: 20,
-            runSpacing: 8,
+            spacing: 5,
+            runSpacing: 10,
             children: status.entries.map((e) {
-              return Text(
-                '${e.key}원: ${e.value}개',
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontFamily: 'Pretendard',
+              return ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 90), // 너비 제한
+                child: Text(
+                  '${e.key}원: ${e.value}개',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontFamily: 'Pretendard',
+                  ),
                 ),
               );
             }).toList(),

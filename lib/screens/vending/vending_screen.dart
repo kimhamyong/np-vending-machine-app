@@ -106,28 +106,12 @@ class _VendingScreenState extends State<VendingScreen> {
 
   void selectDrink(Drink drink) {
     setState(() {
-      selectedDrink = drink;
+      if (selectedDrink == drink) {
+        selectedDrink = null; // 같은 음료 클릭 시 해제
+      } else {
+        selectedDrink = drink; // 새로운 음료 선택
+      }
     });
-  }
-
-  Widget buildCommonButton(String label, VoidCallback onPressed) {
-    return ElevatedButton(
-      onPressed: onPressed,
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.indigo,
-        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-      ),
-      child: Text(
-        label,
-        style: const TextStyle(
-          fontFamily: 'Pretendard',
-          fontWeight: FontWeight.bold,
-          fontSize: 16,
-          color: Colors.white,
-        ),
-      ),
-    );
   }
 
   @override
@@ -140,7 +124,7 @@ class _VendingScreenState extends State<VendingScreen> {
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        padding: const EdgeInsets.fromLTRB(16, 32, 16, 32),
+        padding: const EdgeInsets.fromLTRB(16, 70, 16, 20),
         decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage('assets/images/background.png'),
@@ -155,23 +139,19 @@ class _VendingScreenState extends State<VendingScreen> {
               selectedDrink: selectedDrink,
               onSelect: selectDrink,
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(child: ChangeStatusBox(status: changeStatus)),
+              ],
+            ),
+            const SizedBox(height: 50),
             CurrencyInputSection(
               insertedAmount: insertedAmount,
               onInsertMoney: insertMoney,
               onRefund: handleRefund,
               onPurchase: handlePurchase,
-            ),
-            const SizedBox(height: 24),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(child: ChangeStatusBox(status: changeStatus)),
-                const SizedBox(width: 16),
-                buildCommonButton('관리자 모드', () {
-                  Navigator.pushNamed(context, '/admin');
-                }),
-              ],
             ),
           ],
         ),

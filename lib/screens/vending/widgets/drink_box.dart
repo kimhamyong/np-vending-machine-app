@@ -23,11 +23,13 @@ class DrinkBox extends StatelessWidget {
         opacity: isEnabled ? 1.0 : 0.4,
         child: Container(
           width: 150,
-          height: 80,
-          margin: const EdgeInsets.all(8),
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 6),
+          height: 70,
+          margin: const EdgeInsets.all(5),
+          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 4),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: isSelected
+                ? const Color.fromARGB(255, 255, 214, 214) // 선택 시 색상
+                : Colors.white, // 미선택 시 흰색
             borderRadius: BorderRadius.circular(12),
             boxShadow: const [
               BoxShadow(
@@ -36,9 +38,6 @@ class DrinkBox extends StatelessWidget {
                 blurRadius: 4,
               ),
             ],
-            border: isSelected
-                ? Border.all(color: Colors.blueAccent, width: 2)
-                : null,
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -47,19 +46,20 @@ class DrinkBox extends StatelessWidget {
                 drink.name,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
-                  fontSize: 14,
+                  fontSize: 18,
                   fontWeight: FontWeight.bold,
                   fontFamily: 'Pretendard',
-                  color: Colors.black,
+                  color: Color.fromARGB(255, 136, 136, 136),
                 ),
               ),
               const SizedBox(height: 4),
               Text(
                 '${drink.price}원',
                 style: const TextStyle(
-                  fontSize: 12,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
                   fontFamily: 'Pretendard',
-                  color: Colors.black,
+                  color: Color.fromARGB(255, 0, 0, 0),
                 ),
               ),
             ],
