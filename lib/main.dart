@@ -6,7 +6,7 @@ import 'package:np_vending_machine_app/screens/onboarding/change_password_screen
 import 'package:np_vending_machine_app/screens/vending/vending_screen.dart';
 import 'package:np_vending_machine_app/screens/admin/admin_screen.dart';
 import 'package:np_vending_machine_app/screens/admin/sales_screen.dart';
-import 'package:np_vending_machine_app/vending/coin_store.dart';
+import 'package:np_vending_machine_app/storage/coin_store.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
