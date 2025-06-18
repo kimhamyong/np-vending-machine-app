@@ -59,35 +59,16 @@ class _SalesScreenState extends State<SalesScreen> {
 
   int get totalDailySales => dailySales.fold(0, (sum, s) => sum + s.total);
 
-  Future<void> _selectMonth(BuildContext context) async {
-    final picked = await showDatePicker(
-      context: context,
-      initialDate: selectedMonth,
-      firstDate: DateTime(2020),
-      lastDate: DateTime(2030),
-      helpText: '월 선택',
-    );
-
-    if (picked != null) {
-      setState(() {
-        selectedMonth = DateTime(picked.year, picked.month, 1);
-      });
-    }
+  void _goToPreviousMonth() {
+    setState(() {
+      selectedMonth = DateTime(selectedMonth.year, selectedMonth.month - 1);
+    });
   }
 
-  Future<void> _selectDate(BuildContext context) async {
-    final picked = await showDatePicker(
-      context: context,
-      initialDate: selectedDate,
-      firstDate: DateTime(2020),
-      lastDate: DateTime(2030),
-    );
-    if (picked != null) {
-      setState(() {
-        selectedDate = picked;
-        selectedMonth = DateTime(picked.year, picked.month, 1);
-      });
-    }
+  void _goToNextMonth() {
+    setState(() {
+      selectedMonth = DateTime(selectedMonth.year, selectedMonth.month + 1);
+    });
   }
 
   @override
@@ -100,7 +81,9 @@ class _SalesScreenState extends State<SalesScreen> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        automaticallyImplyLeading: false,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        centerTitle: true,
         title: const Text(
           '매출',
           style: TextStyle(
@@ -109,9 +92,6 @@ class _SalesScreenState extends State<SalesScreen> {
             color: Colors.black,
           ),
         ),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        centerTitle: true,
       ),
       body: Stack(
         children: [
@@ -125,11 +105,21 @@ class _SalesScreenState extends State<SalesScreen> {
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(selectedMonthStr,
-                      style: const TextStyle(
-                          fontSize: 20, fontWeight: FontWeight.bold)),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconButton(
+                          onPressed: _goToPreviousMonth,
+                          icon: const Icon(Icons.chevron_left)),
+                      Text(selectedMonthStr,
+                          style: const TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold)),
+                      IconButton(
+                          onPressed: _goToNextMonth,
+                          icon: const Icon(Icons.chevron_right)),
+                    ],
+                  ),
                   const SizedBox(height: 4),
                   const Text('총 판매 금액', style: TextStyle(fontSize: 16)),
                   Text(
@@ -142,36 +132,71 @@ class _SalesScreenState extends State<SalesScreen> {
                   ),
                   const SizedBox(height: 16),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      ElevatedButton(
-                        onPressed: () => _selectMonth(context),
-                        child: const Text('월 선택'),
-                      ),
+                      const Text('매출 등록일 선택', style: TextStyle(fontSize: 16)),
                       const SizedBox(width: 12),
-                      ElevatedButton(
-                        onPressed: () => _selectDate(context),
-                        child: const Text('일 선택'),
+                      OutlinedButton(
+                        onPressed: () async {
+                          final picked = await showDatePicker(
+                            context: context,
+                            initialDate: selectedDate,
+                            firstDate: DateTime(2020),
+                            lastDate: DateTime(2030),
+                            builder: (context, child) {
+                              return Theme(
+                                data: Theme.of(context).copyWith(
+                                  colorScheme: const ColorScheme.light(
+                                    primary: Colors.grey,
+                                    onPrimary: Colors.white,
+                                    onSurface: Colors.black87,
+                                    surface: Colors.white,
+                                  ),
+                                  datePickerTheme: const DatePickerThemeData(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.zero,
+                                    ),
+                                  ),
+                                ),
+                                child: child!,
+                              );
+                            },
+                          );
+                          if (picked != null) {
+                            setState(() {
+                              selectedDate = picked;
+                              selectedMonth =
+                                  DateTime(picked.year, picked.month);
+                            });
+                          }
+                        },
+                        style: OutlinedButton.styleFrom(
+                          side: const BorderSide(color: Colors.grey),
+                          backgroundColor: Colors.white,
+                          foregroundColor: Colors.black,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.zero,
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 12),
+                        ),
+                        child: Text(
+                          selectedDateStr,
+                          style: const TextStyle(fontSize: 16),
+                        ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 12),
-                  if (dailySales.isNotEmpty)
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(12),
-                      margin: const EdgeInsets.only(bottom: 12),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.9),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Text(
-                        '$selectedDateStr 총 매출: ${NumberFormat('#,###').format(totalDailySales)}원',
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
-                      ),
+                  const SizedBox(height: 8),
+                  Text(
+                    '${NumberFormat('#,###').format(totalDailySales)}원',
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.green,
                     ),
+                  ),
+                  const SizedBox(height: 12),
                   Expanded(
                     child: ListView.builder(
                       itemCount: dailySales.length,
@@ -181,7 +206,7 @@ class _SalesScreenState extends State<SalesScreen> {
                           margin: const EdgeInsets.symmetric(vertical: 6),
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.85),
+                            color: Colors.white.withOpacity(0.9),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Row(
