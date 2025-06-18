@@ -83,11 +83,14 @@ class DrinkEditContent extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               GestureDetector(
-                onTap: provider.decreaseStock,
-                child: const CircleAvatar(
+                onTap: provider.canConfirm ? null : provider.decreaseStock,
+                child: CircleAvatar(
                   radius: 24,
-                  backgroundColor: Colors.red,
-                  child: Icon(Icons.remove, color: Colors.white),
+                  backgroundColor:
+                      provider.canConfirm ? Colors.grey[400]! : Colors.red,
+                  child: Icon(Icons.remove,
+                      color:
+                          provider.canConfirm ? Colors.white60 : Colors.white),
                 ),
               ),
               const SizedBox(width: 16),
@@ -110,15 +113,20 @@ class DrinkEditContent extends StatelessWidget {
               ),
               const SizedBox(width: 16),
               GestureDetector(
-                onTap: provider.increaseStock,
+                onTap: provider.canConfirm ? null : provider.increaseStock,
                 child: CircleAvatar(
                   radius: 24,
-                  backgroundColor: Colors.green[300],
-                  child: const Icon(Icons.add, color: Colors.white),
+                  backgroundColor: provider.canConfirm
+                      ? Colors.grey[400]!
+                      : Colors.green[300],
+                  child: Icon(Icons.add,
+                      color:
+                          provider.canConfirm ? Colors.white60 : Colors.white),
                 ),
               ),
             ],
           ),
+
           const SizedBox(height: 32),
 
           Column(
@@ -185,12 +193,13 @@ class DrinkEditContent extends StatelessWidget {
               ),
               const SizedBox(height: 12),
 
-              // 저장하기
+              // 확인
               SizedBox(
                 width: double.infinity,
                 height: 52,
                 child: ElevatedButton(
                   onPressed: () {
+                    provider.confirmEdit();
                     onConfirm(provider.drink);
                     Navigator.pop(context);
                   },
@@ -201,7 +210,7 @@ class DrinkEditContent extends StatelessWidget {
                     ),
                   ),
                   child: const Text(
-                    '저장하기',
+                    '확인',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
