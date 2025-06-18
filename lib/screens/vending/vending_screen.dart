@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:np_vending_machine_app/models/drink.dart';
 import 'package:np_vending_machine_app/screens/vending/widgets/currency_input_section.dart';
 import 'package:np_vending_machine_app/screens/vending/widgets/drink_grid_section.dart';
+import 'package:np_vending_machine_app/screens/vending/widgets/change_status_box.dart';
+import 'package:np_vending_machine_app/vending/vending_manager.dart';
 
 class VendingScreen extends StatefulWidget {
   static const routeName = '/vending';
@@ -13,8 +15,9 @@ class VendingScreen extends StatefulWidget {
 }
 
 class _VendingScreenState extends State<VendingScreen> {
-  int insertedAmount = 0;
+  final VendingManager vendingManager = VendingManager();
   Drink? selectedDrink;
+  Map<int, int> changeStatus = {};
 
   final List<Drink> drinks = [
     Drink(name: '믹스커피', price: 200, stock: 5),
@@ -27,19 +30,64 @@ class _VendingScreenState extends State<VendingScreen> {
     Drink(name: '특화음료', price: 800, stock: 0),
   ];
 
+  @override
+  void initState() {
+    super.initState();
+    _loadInitialInventoryStatus();
+  }
+
+  void _loadInitialInventoryStatus() async {
+    final status = await vendingManager.getInventoryStatus();
+    setState(() {
+      changeStatus = status;
+    });
+  }
+
   void insertMoney(int unit) {
-    if (insertedAmount + unit <= 7000) {
-      setState(() {
-        insertedAmount += unit;
-      });
+    try {
+      vendingManager.insert(unit);
+      setState(() {});
+    } catch (e) {
+      _showAlert(e.toString());
     }
   }
 
-  void refund() {
-    setState(() {
-      insertedAmount = 0;
-      selectedDrink = null;
-    });
+  void handleRefund() {
+    final refundQueue = vendingManager.refund();
+    final list = refundQueue.toList();
+
+    _showAlert(list.isEmpty ? '반환할 금액이 없습니다.' : list.join("원, ") + ' 반환됨');
+
+    // 거스름돈 현황은 변화 없음
+    setState(() {});
+  }
+
+  void handlePurchase() async {
+    if (selectedDrink == null) return;
+
+    try {
+      final change = await vendingManager.purchase(selectedDrink!.price);
+      final list = change.toList();
+
+      _showAlert(list.isEmpty ? '거스름돈 없음' : list.join("원, ") + ' 거스름돈 반환됨');
+
+      final status = await vendingManager.getInventoryStatus();
+      setState(() {
+        changeStatus = status;
+        selectedDrink = null;
+      });
+    } catch (e) {
+      _showAlert(e.toString());
+    }
+  }
+
+  void _showAlert(String msg) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        content: Text(msg),
+      ),
+    );
   }
 
   void selectDrink(Drink drink) {
@@ -48,35 +96,43 @@ class _VendingScreenState extends State<VendingScreen> {
     });
   }
 
+  Widget buildCommonButton(String label, VoidCallback onPressed) {
+    return ElevatedButton(
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.indigo,
+        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+      ),
+      child: Text(
+        label,
+        style: const TextStyle(
+          fontFamily: 'Pretendard',
+          fontWeight: FontWeight.bold,
+          fontSize: 16,
+          color: Colors.white,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final insertedAmount = vendingManager.totalAmount;
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       backgroundColor: Colors.transparent,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: const Text(
-          '자판기',
-          style: TextStyle(
-            fontFamily: 'Pretendard',
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
-          ),
-        ),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        centerTitle: true,
-      ),
       body: Container(
         width: double.infinity,
         height: double.infinity,
+        padding: const EdgeInsets.fromLTRB(16, 32, 16, 32),
         decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage('assets/images/background.png'),
             fit: BoxFit.cover,
           ),
         ),
-        padding: const EdgeInsets.fromLTRB(16, kToolbarHeight + 32, 16, 32),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -85,41 +141,23 @@ class _VendingScreenState extends State<VendingScreen> {
               selectedDrink: selectedDrink,
               onSelect: selectDrink,
             ),
-            const SizedBox(height: 32),
+            const SizedBox(height: 24),
             CurrencyInputSection(
               insertedAmount: insertedAmount,
-              onInsertMoney: (unit) {
-                setState(() => insertedAmount += unit);
-              },
-              onRefund: () {
-                setState(() => insertedAmount = 0);
-              },
-              onPurchase: () {
-                // TODO: 구매 로직
-              },
+              onInsertMoney: insertMoney,
+              onRefund: handleRefund,
+              onPurchase: handlePurchase,
             ),
-            const SizedBox(height: 32),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/login');
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.indigo,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(25),
-                ),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-              ),
-              child: const Text(
-                '관리자 페이지로 이동',
-                style: TextStyle(
-                  fontFamily: 'Pretendard',
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                  color: Colors.white,
-                ),
-              ),
+            const SizedBox(height: 24),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(child: ChangeStatusBox(status: changeStatus)),
+                const SizedBox(width: 16),
+                buildCommonButton('관리자 모드', () {
+                  Navigator.pushNamed(context, '/admin');
+                }),
+              ],
             ),
           ],
         ),

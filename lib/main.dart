@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
-import 'screens/onboarding/initial_screen.dart';
-import 'screens/onboarding/login_screen.dart';
-import 'screens/onboarding/signup_screen.dart';
-import 'screens/onboarding/change_password_screen.dart';
-import 'screens/vending/vending_screen.dart';
-import 'screens/admin/admin_screen.dart';
-import 'screens/admin/sales_screen.dart';
+import 'package:np_vending_machine_app/screens/onboarding/initial_screen.dart';
+import 'package:np_vending_machine_app/screens/onboarding/login_screen.dart';
+import 'package:np_vending_machine_app/screens/onboarding/signup_screen.dart';
+import 'package:np_vending_machine_app/screens/onboarding/change_password_screen.dart';
+import 'package:np_vending_machine_app/screens/vending/vending_screen.dart';
+import 'package:np_vending_machine_app/screens/admin/admin_screen.dart';
+import 'package:np_vending_machine_app/screens/admin/sales_screen.dart';
+import 'package:np_vending_machine_app/vending/coin_store.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await CoinStore.initializeIfNeeded();
+
   runApp(VendingMachineApp());
 }
 
