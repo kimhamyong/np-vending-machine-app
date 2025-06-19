@@ -38,6 +38,12 @@ class _VendingScreenState extends State<VendingScreen> {
     _loadInitialInventoryStatus();
   }
 
+  @override
+  void dispose() {
+    vendingManager.persistInsertedState(); // 화면 이탈 전에 저장
+    super.dispose();
+  }
+
   void _loadInitialInventoryStatus() async {
     final status = await vendingManager.getInventoryStatus();
     setState(() {
