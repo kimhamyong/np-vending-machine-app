@@ -6,7 +6,6 @@ class DioService {
   static Dio? _dio;
   static String? _baseUrl;
 
-  /// config.json에서 baseUrl 구성 (예: http://192.168.0.10:8000)
   static Future<void> init() async {
     final configString = await rootBundle.loadString('assets/config.json');
     final config = json.decode(configString);
@@ -38,7 +37,7 @@ class DioService {
         data: data,
       );
     } catch (e) {
-      rethrow;
+      throw Exception("Dio 요청 중 오류 발생: $e");
     }
   }
 

@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:np_vending_machine_app/services/dio_service.dart';
 import 'package:np_vending_machine_app/services/network_service.dart';
 import 'package:np_vending_machine_app/services/tcp_connection.dart';
 import 'package:np_vending_machine_app/screens/utils/error_dialog.dart';
@@ -16,6 +18,7 @@ class SignupService {
     };
 
     try {
+      print('보내는 데이터: ${jsonEncode(payload)}'); // payload 출력
       // 모바일에서는 TCP로, 웹에서는 HTTP로 요청
       if (isMobilePlatform) {
         payload['action'] = 'user_signup';
@@ -25,9 +28,9 @@ class SignupService {
         return success; // 서버 응답에 따라 true 또는 false 반환
       } else {
         // 웹에서는 'action' 제외하고 HTTP 요청
-        final response = await NetworkService.sendAndPost(
-          apiPath: '/api/user_signup', // 웹에서 사용할 경로
-          payload: payload,
+        final response = await DioService.post(
+          '/api/user_signup', // 웹에서 사용할 경로
+          payload,
         );
 
         // 응답 타입 출력
@@ -35,8 +38,8 @@ class SignupService {
         print('서버 응답: $response'); // 응답 전체 출력
 
         // 응답 처리 (success 체크)
-        if (response is Map<String, dynamic>) {
-          if (response['success'] == true) {
+        if (response is Response<dynamic>) {
+          if (response.data['success'] == true) {
             print("회원가입 성공: $userId");
 
             // 성공 시 SharedPreferences에 userId 저장
@@ -46,7 +49,7 @@ class SignupService {
           } else {
             // 실패 처리 (에러 메시지 다이얼로그 띄우기)
             ErrorDialog.show(
-                context, response['error'] ?? '알 수 없는 오류가 발생했습니다.');
+                context, response.data['error'] ?? '알 수 없는 오류가 발생했습니다.');
             return false; // 실패 시 false 반환
           }
         } else {
