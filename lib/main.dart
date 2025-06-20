@@ -8,12 +8,14 @@ import 'package:np_vending_machine_app/screens/vending/vending_screen.dart';
 import 'package:np_vending_machine_app/screens/admin/admin_screen.dart';
 import 'package:np_vending_machine_app/screens/admin/sales_screen.dart';
 import 'package:np_vending_machine_app/services/dio_service.dart';
+import 'package:np_vending_machine_app/services/tcp_connection.dart';
 import 'package:np_vending_machine_app/storage/coin_store.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await CoinStore.initializeIfNeeded();
   await DioService.init();
+  await TcpConnectionManager.instance.loadConfigAndConnect();
   runApp(VendingMachineApp());
 }
 

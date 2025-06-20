@@ -1,5 +1,6 @@
+// lib/screens/signup_screen.dart
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:np_vending_machine_app/services/user/signup_service.dart';
 
 class SignupScreen extends StatefulWidget {
   static const routeName = '/signup';
@@ -45,11 +46,31 @@ class _SignupScreenState extends State<SignupScreen> {
       return;
     }
 
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('saved_id', idController.text); // 내부 저장
+    final userId = idController.text;
+    final encryptedPassword = _encryptPassword(password);
 
-    print('회원가입 성공: ${idController.text}');
-    Navigator.pushReplacementNamed(context, '/admin');
+    try {
+      // SignupService 호출 (context를 함께 전달)
+      bool isSignupSuccessful =
+          await SignupService().signup(context, userId, encryptedPassword);
+
+      // 회원가입 성공 여부에 따른 화면 전환
+      if (isSignupSuccessful) {
+        // 성공 시 처리
+        Navigator.pushReplacementNamed(context, '/admin');
+      } else {
+        // 실패 시 처리
+        print('회원가입 실패');
+      }
+    } catch (e) {
+      // 예외 처리
+      print('회원가입 실패: $e');
+    }
+  }
+
+  String _encryptPassword(String password) {
+    // 여기에 실제 암호화 로직을 넣어야 합니다
+    return password; // 현재는 그대로 리턴, 실제로는 암호화해야 함
   }
 
   @override

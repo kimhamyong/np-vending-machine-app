@@ -19,29 +19,29 @@ class _AdminScreenState extends State<AdminScreen> {
   @override
   void initState() {
     super.initState();
-    _setupTcp();
+    //_setupTcp();
   }
 
-  Future<void> _setupTcp() async {
-    final configString = await rootBundle.loadString('assets/config.json');
-    final config = json.decode(configString);
-    final host = config['host'];
-    final port = config['port'];
+  // Future<void> _setupTcp() async {
+  //   final configString = await rootBundle.loadString('assets/config.json');
+  //   final config = json.decode(configString);
+  //   final host = config['host'];
+  //   final port = config['port'];
 
-    if (host == null || port == null) {
-      throw Exception("config.json에 'host'와 'port'가 정의되어야 합니다.");
-    }
+  //   if (host == null || port == null) {
+  //     throw Exception("config.json에 'host'와 'port'가 정의되어야 합니다.");
+  //   }
 
-    TcpConnectionManager.instance.initialize(
-      host: host,
-      port: port,
-      onMessageReceived: _handleServerMessage,
-      onDisconnected: () {
-        ErrorDialog.show(context, '서버 연결이 끊어졌습니다. 자동 재시도 중입니다.');
-      },
-    );
-    TcpConnectionManager.instance.connect();
-  }
+  //   TcpConnectionManager.instance.initialize(
+  //     host: host,
+  //     port: port,
+  //     onMessageReceived: _handleServerMessage,
+  //     onDisconnected: () {
+  //       ErrorDialog.show(context, '서버 연결이 끊어졌습니다. 자동 재시도 중입니다.');
+  //     },
+  //   );
+  //   TcpConnectionManager.instance.connect();
+  // }
 
   void _handleServerMessage(String message) {
     if (message.contains('soldout')) {
