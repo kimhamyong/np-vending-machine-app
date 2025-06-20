@@ -4,6 +4,7 @@ import 'package:np_vending_machine_app/services/network_service.dart';
 import 'package:np_vending_machine_app/services/tcp_connection.dart';
 import 'package:np_vending_machine_app/screens/utils/error_dialog.dart';
 import 'dart:async'; // Completer를 사용하기 위한 import
+import 'package:shared_preferences/shared_preferences.dart'; // SharedPreferences import
 
 class SignupService {
   // 회원가입 함수
@@ -19,7 +20,8 @@ class SignupService {
       if (isMobilePlatform) {
         payload['action'] = 'user_signup';
         // TCP 연결을 초기화하고 연결 후 전송
-        bool success = await _sendTcpRequest(payload, context);
+        bool success =
+            await _sendTcpRequest(payload, userId, context); // userId를 함께 넘김
         return success; // 서버 응답에 따라 true 또는 false 반환
       } else {
         // 웹에서는 'action' 제외하고 HTTP 요청
@@ -36,6 +38,10 @@ class SignupService {
         if (response is Map<String, dynamic>) {
           if (response['success'] == true) {
             print("회원가입 성공: $userId");
+
+            // 성공 시 SharedPreferences에 userId 저장
+            await _saveUserIdToSharedPreferences(userId);
+
             return true; // 성공 시 true 반환
           } else {
             // 실패 처리 (에러 메시지 다이얼로그 띄우기)
@@ -55,9 +61,16 @@ class SignupService {
     }
   }
 
+  // SharedPreferences에 userId 저장
+  Future<void> _saveUserIdToSharedPreferences(String userId) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('userid', userId); // userId 저장
+    print('회원가입 후 userId 저장: $userId');
+  }
+
   // TCP 요청을 전송하는 함수
   Future<bool> _sendTcpRequest(
-      Map<String, dynamic> payload, BuildContext context) async {
+      Map<String, dynamic> payload, String userId, BuildContext context) async {
     // Completer를 사용하여 비동기 작업 완료를 처리
     final completer = Completer<bool>();
 
@@ -83,6 +96,8 @@ class SignupService {
         if (responseData['success'] == true) {
           // 성공 처리
           print("회원가입 성공: $responseData");
+          // 성공하면 SharedPreferences에 userId 저장
+          _saveUserIdToSharedPreferences(userId);
           completer.complete(true); // 성공 시 true 반환
         }
       };
