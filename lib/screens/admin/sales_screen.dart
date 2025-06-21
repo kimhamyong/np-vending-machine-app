@@ -19,28 +19,12 @@ class _SalesScreenState extends State<SalesScreen> {
 
   final List<Sales> salesData = [
     Sales(
-        drink: Drink(name: '돈까', price: 100000, stock: 3),
+        drink: Drink(name: '고급캔커피', price: 7000, stock: 2),
         sold: 2,
         date: DateTime.now()),
     Sales(
-        drink: Drink(name: '테스트3', price: 10000, stock: 10),
+        drink: Drink(name: '물', price: 450, stock: 1),
         sold: 5,
-        date: DateTime.now()),
-    Sales(
-        drink: Drink(name: '메뉴명22', price: 10000, stock: 1),
-        sold: 0,
-        date: DateTime.now().subtract(const Duration(days: 1))),
-    Sales(
-        drink: Drink(name: '양파숲', price: 10000, stock: 8),
-        sold: 3,
-        date: DateTime.now()),
-    Sales(
-        drink: Drink(name: 'ㅎㅍ', price: 899, stock: 4),
-        sold: 1,
-        date: DateTime.now()),
-    Sales(
-        drink: Drink(name: '가나', price: 5000, stock: 9),
-        sold: 2,
         date: DateTime.now()),
   ];
 
